@@ -6,15 +6,6 @@ append() encola al final; pop(0) atiende al primero.
 Así se respeta el orden de llegada de la terminal.
 """
 
-import sys
-
-# La consola de Windows debe mostrar tildes y la ñ sin alterar el texto.
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
-if hasattr(sys.stdin, "reconfigure"):
-    sys.stdin.reconfigure(encoding="utf-8")
-
-
 # Cola FIFO de pasajeros. El índice 0 es quien lleva más tiempo esperando.
 cola_pasajeros = []
 # El turno identifica el orden de llegada (P001, P002, ...).
@@ -38,7 +29,7 @@ def registrar_pasajero(cola):
         print("Dato rechazado: el destino no puede estar vacío.")
         return
 
-    turno = f"P{siguiente_turno:03d}"
+    turno = "P" + str(siguiente_turno).zfill(3)
     pasajero = {
         "turno": turno,
         "nombre": nombre,
@@ -46,8 +37,8 @@ def registrar_pasajero(cola):
     }
     # append coloca al pasajero al final: entra de último y sale de último.
     cola.append(pasajero)
-    siguiente_turno += 1
-    print(f"Pasajero registrado. Turno: {turno}")
+    siguiente_turno = siguiente_turno + 1
+    print("Pasajero registrado. Turno:", turno)
 
 
 def atender_pasajero(cola):
@@ -62,9 +53,9 @@ def atender_pasajero(cola):
     # pop(0) retira el frente de la cola: el primero que se registró.
     pasajero = cola.pop(0)
     print("PASAJERO ATENDIDO")
-    print(f"Turno: {pasajero['turno']}")
-    print(f"Nombre: {pasajero['nombre']}")
-    print(f"Destino: {pasajero['destino']}")
+    print("Turno:", pasajero["turno"])
+    print("Nombre:", pasajero["nombre"])
+    print("Destino:", pasajero["destino"])
 
 
 def mostrar_cola(cola):
@@ -76,12 +67,12 @@ def mostrar_cola(cola):
         return
 
     for pasajero in cola:
-        print(f"{pasajero['turno']} - {pasajero['nombre']} - {pasajero['destino']}")
-    print(f"Total en espera: {len(cola)}")
+        print(pasajero["turno"], "-", pasajero["nombre"], "-", pasajero["destino"])
+    print("Total en espera:", len(cola))
 
 
 def mostrar_menu():
-    """Presenta las opciones. Cada número llama a una sola función."""
+    """Presenta las opciones."""
     print()
     print("===== COLA DE PASAJEROS (FIFO) =====")
     print("1. Registrar pasajero")
@@ -108,5 +99,4 @@ def main():
             print("Opción no válida. Elija un número del 1 al 4.")
 
 
-if __name__ == "__main__":
-    main()
+main()

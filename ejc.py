@@ -7,15 +7,6 @@ Mostrar y buscar se hacen con recursión: cada nodo
 resuelve su parte y delega el resto a sus hijos.
 """
 
-import sys
-
-# La consola de Windows debe mostrar tildes y la ñ sin alterar el texto.
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
-if hasattr(sys.stdin, "reconfigure"):
-    sys.stdin.reconfigure(encoding="utf-8")
-
-
 class NodoDestino:
     """Un nodo del árbol: nombre del destino y lista de hijos."""
 
@@ -62,7 +53,7 @@ def mostrar_jerarquia(nodo, nivel=0):
     para que se vea la jerarquía completa.
     """
     sangria = "  " * nivel
-    print(f"{sangria}- {nodo.nombre}")
+    print(sangria + "- " + nodo.nombre)
     for hijo in nodo.hijos:
         mostrar_jerarquia(hijo, nivel + 1)
 
@@ -99,13 +90,13 @@ def opcion_buscar_destino(arbol):
 
     encontrado = buscar_destino(arbol, nombre)
     if encontrado is None:
-        print(f"El destino '{nombre}' no existe.")
+        print("El destino no existe:", nombre)
     else:
-        print(f"Destino encontrado: {encontrado.nombre}")
+        print("Destino encontrado:", encontrado.nombre)
 
 
 def mostrar_menu():
-    """Presenta las opciones. Cada número llama a una sola función."""
+    """Presenta las opciones."""
     print()
     print("===== ÁRBOL DE DESTINOS =====")
     print("1. Mostrar jerarquía")
@@ -131,5 +122,4 @@ def main():
             print("Opción no válida. Elija un número del 1 al 3.")
 
 
-if __name__ == "__main__":
-    main()
+main()
