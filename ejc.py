@@ -66,6 +66,16 @@ def buscar_destino(nodo, nombre_buscado):
     return None
 
 
+def buscar_destino_valido(arbol, nombre):
+    # Pasajeros y buses usan el mismo árbol, sin repetir la lista de ciudades.
+    encontrado = buscar_destino(arbol, nombre)
+    if encontrado is not None:
+        # La terminal y las zonas organizan el árbol; solo las ciudades son destinos.
+        if len(encontrado.hijos) == 0:
+            return encontrado.nombre
+    return None
+
+
 def opcion_mostrar_arbol(arbol):
     print("Árbol de destinos:")
     mostrar_jerarquia(arbol)
@@ -114,4 +124,5 @@ def main():
             print("Opción no válida. Elija un número del 1 al 3.")
 
 
-main()
+if __name__ == "__main__":
+    main()

@@ -8,30 +8,14 @@ La lista guarda a los pasajeros en el orden en que llegan.
 de esta forma los pasajeros salen de la cola en el orden en que llegaron
 """
 
+import ejc
+
+
 cola_pasajeros = []
 # cada pasajero recibe un turno segun el orden de llegada (P001, P002, ...).
 siguiente_turno = 1
 
-# Son las ciudades que aparecen en el árbol del ejercicio C.
-destinos_disponibles = [
-    "San Miguel",
-    "La Unión",
-    "Usulután",
-    "San Salvador",
-    "La Libertad",
-    "Santa Ana",
-    "Ahuachapán",
-]
-
-
-def buscar_destino_valido(nombre):
-    for destino in destinos_disponibles:
-        if destino.lower() == nombre.lower():
-            return destino
-    return None
-
-
-def registrar_pasajero(cola):
+def registrar_pasajero(cola, arbol):
     # Registra un pasajero con nombre y un destino de la terminal.
     global siguiente_turno
 
@@ -45,7 +29,7 @@ def registrar_pasajero(cola):
         print("Dato rechazado: el destino no puede estar vacío.")
         return
 
-    destino = buscar_destino_valido(destino)
+    destino = ejc.buscar_destino_valido(arbol, destino)
     if destino is None:
         print("Dato rechazado: el destino no existe.")
         return
@@ -94,13 +78,13 @@ def mostrar_cola(cola):
 # Mejora: pasajeros por destino
 # Ayuda a organizar los viajes según cuántos pasajeros esperan.
 # Prueba: dos pasajeros para San Miguel dan 2; al atender a uno, queda 1.
-def contar_por_destino(cola):
+def contar_por_destino(cola, arbol):
     destino = input("Destino a consultar: ").strip()
     if destino == "":
         print("Dato rechazado: el destino no puede estar vacío.")
         return
 
-    destino = buscar_destino_valido(destino)
+    destino = ejc.buscar_destino_valido(arbol, destino)
     if destino is None:
         print("Dato rechazado: el destino no existe.")
         return
@@ -129,18 +113,20 @@ def mostrar_menu():
 
 
 def main():
+    arbol = ejc.construir_arbol()
+
     while True:
         mostrar_menu()
         opcion = input("Seleccione una opción: ").strip()
 
         if opcion == "1":
-            registrar_pasajero(cola_pasajeros)
+            registrar_pasajero(cola_pasajeros, arbol)
         elif opcion == "2":
             atender_pasajero(cola_pasajeros)
         elif opcion == "3":
             mostrar_cola(cola_pasajeros)
         elif opcion == "4":
-            contar_por_destino(cola_pasajeros)
+            contar_por_destino(cola_pasajeros, arbol)
         elif opcion == "5":
             salir()
             break
@@ -148,4 +134,5 @@ def main():
             print("Opción no válida. Elija un número del 1 al 5.")
 
 
-main()
+if __name__ == "__main__":
+    main()
