@@ -1,10 +1,9 @@
-# Ejercicio C. Arbol de destinos
-# NodoDestino guarda el nombre y una lista de hijos
+# Ejercicio C. Árbol de destinos
+# NodoDestino: nombre + lista de hijos (lo pide el laboratorio)
 
 class NodoDestino:
     def __init__(self, nombre):
         self.nombre = nombre
-        # hijos = zonas o ciudades debajo de este nodo
         self.hijos = []
 
     def agregar_hijo(self, nodo_hijo):
@@ -35,68 +34,50 @@ def construir_arbol():
 
 
 def mostrar_jerarquia(nodo, nivel=0):
-    # recursivo: imprime el nodo y luego sus hijos
-    sangria = "  " * nivel
-    print(sangria + "- " + nodo.nombre)
+    # recursivo: imprime el nodo y luego cada hijo
+    print("  " * nivel + "- " + nodo.nombre)
     for hijo in nodo.hijos:
         mostrar_jerarquia(hijo, nivel + 1)
 
 
 def buscar_destino(nodo, nombre_buscado):
-    # busqueda recursiva: regresa el nodo o None
+    # recursivo: regresa el nodo o None (lo pide la guía del lab)
+    # comparamos en minúsculas para que no importe mayúscula o minúscula
     if nodo.nombre.lower() == nombre_buscado.lower():
         return nodo
-
     for hijo in nodo.hijos:
         encontrado = buscar_destino(hijo, nombre_buscado)
         if encontrado is not None:
             return encontrado
-
     return None
 
 
-def opcion_mostrar_arbol(arbol):
-    print("Árbol de destinos:")
-    mostrar_jerarquia(arbol)
+arbol = construir_arbol()
 
-
-def opcion_buscar_destino(arbol):
-    nombre = input("Destino a buscar: ").strip()
-    if nombre == "":
-        print("Dato rechazado: el nombre del destino no puede estar vacío.")
-        return
-
-    encontrado = buscar_destino(arbol, nombre)
-    if encontrado is None:
-        print("El destino no existe:", nombre)
-    else:
-        print("Destino encontrado:", encontrado.nombre)
-
-
-def mostrar_menu():
+while True:
     print()
     print("===== ÁRBOL DE DESTINOS =====")
     print("1. Mostrar jerarquía")
     print("2. Buscar destino")
     print("3. Salir")
 
+    opcion = input("Seleccione una opción: ").strip()
 
-def main():
-    arbol = construir_arbol()
-
-    while True:
-        mostrar_menu()
-        opcion = input("Seleccione una opción: ").strip()
-
-        if opcion == "1":
-            opcion_mostrar_arbol(arbol)
-        elif opcion == "2":
-            opcion_buscar_destino(arbol)
-        elif opcion == "3":
-            print("Programa finalizado.")
-            break
+    if opcion == "1":
+        print("Árbol de destinos:")
+        mostrar_jerarquia(arbol)
+    elif opcion == "2":
+        nombre = input("Destino a buscar: ").strip()
+        if nombre == "":
+            print("Dato rechazado: el nombre del destino no puede estar vacío.")
         else:
-            print("Opción no válida. Elija un número del 1 al 3.")
-
-
-main()
+            encontrado = buscar_destino(arbol, nombre)
+            if encontrado is None:
+                print("El destino no existe:", nombre)
+            else:
+                print("Destino encontrado:", encontrado.nombre)
+    elif opcion == "3":
+        print("Programa finalizado.")
+        break
+    else:
+        print("Opción no válida. Elija un número del 1 al 3.")
