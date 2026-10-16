@@ -1,30 +1,23 @@
 """
-Laboratorio 2 — Ejercicio C. Árbol de destinos
+Laboratorio 2 — Ejercicio C.
 
-NodoDestino representa un punto de la jerarquía
-(terminal, zona o ciudad) y guarda a sus hijos en una lista.
-Mostrar y buscar se hacen con recursión: cada nodo
-resuelve su parte y delega el resto a sus hijos.
+NodoDestino representa un punto de la jerarquía (terminal, zona o ciudad) y guarda a sus hijos en una lista
+Mostrar y buscar se hacen con recursión: cada nodo resuelve su parte y delega el resto a sus hijos
 """
 
 class NodoDestino:
-    """Un nodo del árbol: nombre del destino y lista de hijos."""
+    """Un nodo del árbol: nombre del destino y lista de hijos"""
 
     def __init__(self, nombre):
         self.nombre = nombre
-        # Los hijos permiten armar Terminal -> zona -> ciudad.
         self.hijos = []
 
     def agregar_hijo(self, nodo_hijo):
-        """Cuelga un destino debajo de este nodo."""
         self.hijos.append(nodo_hijo)
 
 
 def construir_arbol():
-    """
-    Arma la jerarquía fija de la terminal.
-    La raíz es Terminal Central; debajo van las zonas y, en cada zona, las ciudades.
-    """
+    """Crea el árbol de destinos con Terminal Central como raíz, las zonas como sus hijos y las ciudades dentro de cada zona"""
     raiz = NodoDestino("Terminal Central")
 
     zona_oriental = NodoDestino("Zona Oriental")
@@ -48,9 +41,8 @@ def construir_arbol():
 
 def mostrar_jerarquia(nodo, nivel=0):
     """
-    Recorrido recursivo en preorden.
-    Primero imprime el nodo actual y después cada hijo con más sangría,
-    para que se vea la jerarquía completa.
+    Recorre el árbol de forma recursiva en preorden
+    imprimiendo cada nodo antes que sus hijos y aumentando la sangría según el nivel
     """
     sangria = "  " * nivel
     print(sangria + "- " + nodo.nombre)
@@ -60,9 +52,8 @@ def mostrar_jerarquia(nodo, nivel=0):
 
 def buscar_destino(nodo, nombre_buscado):
     """
-    Búsqueda recursiva.
-    Compara el nodo actual; si no coincide, pregunta a cada hijo.
-    Devuelve el nodo encontrado o None si el destino no existe.
+    Busca el destino de forma recursiva, sin distinguir mayúsculas
+    Devuelve el nodo encontrado o None si no existe
     """
     if nodo.nombre.lower() == nombre_buscado.lower():
         return nodo
@@ -76,13 +67,11 @@ def buscar_destino(nodo, nombre_buscado):
 
 
 def opcion_mostrar_arbol(arbol):
-    """Muestra la jerarquía completa desde la raíz."""
     print("Árbol de destinos:")
     mostrar_jerarquia(arbol)
 
 
 def opcion_buscar_destino(arbol):
-    """Pide un destino y usa la búsqueda recursiva del árbol."""
     nombre = input("Destino a buscar: ").strip()
     if nombre == "":
         print("Dato rechazado: el nombre del destino no puede estar vacío.")
@@ -96,7 +85,6 @@ def opcion_buscar_destino(arbol):
 
 
 def mostrar_menu():
-    """Presenta las opciones."""
     print()
     print("===== ÁRBOL DE DESTINOS =====")
     print("1. Mostrar jerarquía")
