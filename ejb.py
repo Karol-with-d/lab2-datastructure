@@ -1,14 +1,32 @@
-# Ejercicio B. Cola (FIFO)
-# append() agrega al final, pop(0) atiende al primero
-# estilo como la guía de turnos de la clase 17
+"""
+Laboratorio 2 — Ejercicio B. Cola (FIFO)
 
-cola = []
-numero_turno = 1
+La lista guarda a los pasajeros en el orden en que llegan.
+append() encola al final; pop(0) atiende al primero.
+Así se respeta el orden de llegada de la terminal.
+"""
+
+import sys
+
+# La consola de Windows debe mostrar tildes y la ñ sin alterar el texto.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stdin, "reconfigure"):
+    sys.stdin.reconfigure(encoding="utf-8")
 
 
-def registrar_pasajero():
-    # usamos el contador de afuera
-    global numero_turno
+# Cola FIFO de pasajeros. El índice 0 es quien lleva más tiempo esperando.
+cola_pasajeros = []
+# El turno identifica el orden de llegada (P001, P002, ...).
+siguiente_turno = 1
+
+
+def registrar_pasajero(cola):
+    """
+    Encola un pasajero al final con append().
+    Rechaza un nombre o un destino vacío.
+    """
+    global siguiente_turno
 
     nombre = input("Nombre del pasajero: ").strip()
     if nombre == "":
@@ -20,76 +38,75 @@ def registrar_pasajero():
         print("Dato rechazado: el destino no puede estar vacío.")
         return
 
-    # ticket con 3 dígitos, como en la guía (T001 -> aquí P001)
-    turno = f"P{numero_turno:03d}"
-    # en la guía el cliente es una lista [turno, nombre]
-    pasajero = [turno, nombre, destino]
-
+    turno = f"P{siguiente_turno:03d}"
+    pasajero = {
+        "turno": turno,
+        "nombre": nombre,
+        "destino": destino,
+    }
+    # append coloca al pasajero al final: entra de último y sale de último.
     cola.append(pasajero)
-    numero_turno = numero_turno + 1
+    siguiente_turno += 1
+    print(f"Pasajero registrado. Turno: {turno}")
 
-    print("Pasajero registrado. Turno:", turno)
 
-
-def atender_pasajero():
-    # pop(0) saca al primero
-    if cola:
-        pasajero = cola.pop(0)
-        print("PASAJERO ATENDIDO")
-        print("Turno:", pasajero[0])
-        print("Nombre:", pasajero[1])
-        print("Destino:", pasajero[2])
-    else:
+def atender_pasajero(cola):
+    """
+    Atiende al pasajero que llegó primero con pop(0).
+    Si la cola está vacía, avisa y no interrumpe el programa.
+    """
+    if len(cola) == 0:
         print("No hay pasajeros en espera. No se puede atender.")
-
-
-def mostrar_cola():
-    print("PASAJEROS EN ESPERA")
-    if not cola:
-        print("No hay pasajeros en espera.")
-        print("Total en espera: 0")
-    else:
-        for pasajero in cola:
-            print(pasajero[0], "-", pasajero[1], "-", pasajero[2])
-        print("Total en espera:", len(cola))
-
-
-# Mejora: pasajeros por destino
-def contar_por_destino():
-    destino = input("Destino a consultar: ").strip()
-    if destino == "":
-        print("Dato rechazado: el destino no puede estar vacío.")
         return
 
-    contador = 0
+    # pop(0) retira el frente de la cola: el primero que se registró.
+    pasajero = cola.pop(0)
+    print("PASAJERO ATENDIDO")
+    print(f"Turno: {pasajero['turno']}")
+    print(f"Nombre: {pasajero['nombre']}")
+    print(f"Destino: {pasajero['destino']}")
+
+
+def mostrar_cola(cola):
+    """Muestra el orden de llegada y cuántos pasajeros siguen en espera."""
+    print("PASAJEROS EN ESPERA")
+    if len(cola) == 0:
+        print("No hay pasajeros en espera.")
+        print("Total en espera: 0")
+        return
+
     for pasajero in cola:
-        if pasajero[2].lower() == destino.lower():
-            contador = contador + 1
-
-    print("Pasajeros esperando para", destino + ":", contador)
+        print(f"{pasajero['turno']} - {pasajero['nombre']} - {pasajero['destino']}")
+    print(f"Total en espera: {len(cola)}")
 
 
-while True:
+def mostrar_menu():
+    """Presenta las opciones. Cada número llama a una sola función."""
     print()
     print("===== COLA DE PASAJEROS (FIFO) =====")
     print("1. Registrar pasajero")
     print("2. Atender pasajero")
     print("3. Mostrar pasajeros en espera")
-    print("4. Consultar pasajeros por destino")
-    print("5. Salir")
+    print("4. Salir")
 
-    opcion = input("Seleccione una opción: ").strip()
 
-    if opcion == "1":
-        registrar_pasajero()
-    elif opcion == "2":
-        atender_pasajero()
-    elif opcion == "3":
-        mostrar_cola()
-    elif opcion == "4":
-        contar_por_destino()
-    elif opcion == "5":
-        print("Programa finalizado.")
-        break
-    else:
-        print("Opción no válida. Elija un número del 1 al 5.")
+def main():
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            registrar_pasajero(cola_pasajeros)
+        elif opcion == "2":
+            atender_pasajero(cola_pasajeros)
+        elif opcion == "3":
+            mostrar_cola(cola_pasajeros)
+        elif opcion == "4":
+            print("Programa finalizado.")
+            break
+        else:
+            print("Opción no válida. Elija un número del 1 al 4.")
+
+
+if __name__ == "__main__":
+    main()
