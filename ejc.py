@@ -84,6 +84,10 @@ def opcion_buscar_destino(arbol):
         print("Destino encontrado:", encontrado.nombre)
 
 
+def salir():
+    print("Programa finalizado.")
+
+
 def mostrar_menu():
     print()
     print("===== ÁRBOL DE DESTINOS =====")
@@ -104,7 +108,7 @@ def main():
         elif opcion == "2":
             opcion_buscar_destino(arbol)
         elif opcion == "3":
-            print("Programa finalizado.")
+            salir()
             break
         else:
             print("Opción no válida. Elija un número del 1 al 3.")

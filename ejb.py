@@ -12,9 +12,27 @@ cola_pasajeros = []
 # cada pasajero recibe un turno segun el orden de llegada (P001, P002, ...).
 siguiente_turno = 1
 
+# Son las ciudades que aparecen en el árbol del ejercicio C.
+destinos_disponibles = [
+    "San Miguel",
+    "La Unión",
+    "Usulután",
+    "San Salvador",
+    "La Libertad",
+    "Santa Ana",
+    "Ahuachapán",
+]
+
+
+def buscar_destino_valido(nombre):
+    for destino in destinos_disponibles:
+        if destino.lower() == nombre.lower():
+            return destino
+    return None
+
 
 def registrar_pasajero(cola):
-    # Registra un pasajero si el nombre y el destino no están vacíos.
+    # Registra un pasajero con nombre y un destino de la terminal.
     global siguiente_turno
 
     nombre = input("Nombre del pasajero: ").strip()
@@ -25,6 +43,11 @@ def registrar_pasajero(cola):
     destino = input("Destino: ").strip()
     if destino == "":
         print("Dato rechazado: el destino no puede estar vacío.")
+        return
+
+    destino = buscar_destino_valido(destino)
+    if destino is None:
+        print("Dato rechazado: el destino no existe.")
         return
 
     turno = "P" + str(siguiente_turno).zfill(3)
@@ -69,18 +92,30 @@ def mostrar_cola(cola):
 
 
 # Mejora: pasajeros por destino
+# Ayuda a organizar los viajes según cuántos pasajeros esperan.
+# Prueba: dos pasajeros para San Miguel dan 2; al atender a uno, queda 1.
 def contar_por_destino(cola):
     destino = input("Destino a consultar: ").strip()
     if destino == "":
         print("Dato rechazado: el destino no puede estar vacío.")
         return
 
+    destino = buscar_destino_valido(destino)
+    if destino is None:
+        print("Dato rechazado: el destino no existe.")
+        return
+
+    # Cuenta las coincidencias sin sacar pasajeros de la cola.
     contador = 0
     for pasajero in cola:
         if pasajero["destino"].lower() == destino.lower():
             contador = contador + 1
 
     print("Pasajeros esperando para", destino + ":", contador)
+
+
+def salir():
+    print("Programa finalizado.")
 
 
 def mostrar_menu():
@@ -107,7 +142,7 @@ def main():
         elif opcion == "4":
             contar_por_destino(cola_pasajeros)
         elif opcion == "5":
-            print("Programa finalizado.")
+            salir()
             break
         else:
             print("Opción no válida. Elija un número del 1 al 5.")
